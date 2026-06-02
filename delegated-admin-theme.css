@@ -5,8 +5,6 @@
      1. Host this file at a public HTTPS URL (S3, CDN, GitHub raw, etc.).
      2. In the extension's Configuration/Settings, set the custom CSS field
         (CUSTOM_CSS) to that URL. It is injected when the dashboard loads.
-     3. LOGO: paste your image URL into --logo-url below. The navbar brand is
-        already the clickable "home" link, so this turns it into your logo.
 
    Note: the extension renders Bootstrap-3 markup from Auth0's styleguide.
    Class names can drift between versions — if a rule doesn't bite, confirm the
@@ -16,16 +14,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap");
 
 :root {
-  /* --- LOGO --------------------------------------------------------------
-     Renders on .navbar-header, where Auth0's logo lived. Leave --logo-url as
-     none to just clear Auth0's mark; set it to your own to show your logo:
-       --logo-url: url("https://your-host/logo.svg");
-     Then tune the box it sits in with --logo-width / --logo-height.
-     Must be an absolute https URL. (Raw GitHub URLs are fine for images —
-     the stylesheet MIME restriction does NOT apply to background images.) */
-  --logo-url: url("https://altf0x4.github.io/CDN/auth0-icon-ondark.png");
-  --logo-width: 150px;
-  --logo-height: 34px;
+  /* --- YOUR LOGO ---------------------------------------------------------
+     This swaps Auth0's header logo for yours using the SAME background-image
+     Auth0 uses on .navbar-header. Paste your image URL below:
+       --logo-url: url("https://your-host/logo.png");
+     It must be a direct, absolute https URL to the image itself. With GitHub,
+     use the RAW url (raw.githubusercontent.com/...), NOT the github.com/blob
+     page url — that was the likely reason it didn't show before. */
+  --logo-url: url("https://raw.githubusercontent.com/AltF0x4/CDN/refs/heads/main/auth0-icon-ondark.png");
 
   /* --- Neon palette (edit these) --- */
   --neon-cyan:    #00f0ff;
@@ -133,18 +129,16 @@ header .navbar,
   color: var(--text-bright) !important;
 }
 
-/* Auth0's logo is a background-image on .navbar-header (not a child element),
-   which is why every display:none missed it. Override that background here.
-   This is also where YOUR logo goes: set --logo-url and it appears in place.
-   --logo-url defaults to none, which simply clears Auth0's mark. */
+/* Swap Auth0's header logo for yours. We only override the image and let it
+   fit (contain) within Auth0's existing logo box, so it sits exactly where
+   Auth0's did. If yours doesn't appear, it's the URL, not this rule — Auth0's
+   own logo proves the box works, so check the URL loads on its own (raw, not
+   blob; https; reachable). */
 .navbar-header {
   background-image: var(--logo-url) !important;
   background-repeat: no-repeat !important;
   background-position: left center !important;
-  /* size to the logo height so it can't collapse or scale oddly */
-  background-size: auto var(--logo-height) !important;
-  min-width: var(--logo-width);
-  min-height: calc(var(--logo-height) + 16px);
+  background-size: contain !important;
 }
 
 /* Tenant name + dropdown on the right — force readable text (it was dark on
@@ -165,34 +159,37 @@ header .navbar,
   border: 1px solid var(--border-dim) !important;
 }
 
-/* The open dropdown menu (user/tenant menu) — was white with unreadable text.
-   Make it dark with readable items and a neon hover. */
+/* The open user/tenant menu kept rendering white from the styleguide, so
+   rather than fight it, we guarantee contrast: light menu, dark text. */
 .dropdown-menu {
-  background: var(--bg-panel) !important;
+  background: #f5f7fa !important;
   border: 1px solid var(--border-neon) !important;
   border-radius: var(--radius);
   box-shadow: 0 8px 28px rgba(0, 0, 0, .55), 0 0 18px rgba(0, 240, 255, .15) !important;
 }
 .dropdown-menu > li > a,
 .dropdown-menu li a,
-.dropdown-menu .dropdown-item {
-  color: var(--text-body) !important;
+.dropdown-menu .dropdown-item,
+.dropdown-menu > li > a span,
+.dropdown-menu li a span {
+  color: #0c1018 !important;       /* dark, readable on the light menu */
   background: transparent !important;
+  text-shadow: none !important;
 }
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus,
 .dropdown-menu li a:hover,
 .dropdown-menu .dropdown-item:hover {
-  color: var(--neon-cyan) !important;
-  background: rgba(0, 240, 255, .12) !important;
-  text-shadow: var(--glow-cyan);
+  color: #04060d !important;
+  background: rgba(0, 240, 255, .22) !important;
+  text-shadow: none !important;
 }
 .dropdown-menu .divider,
 .dropdown-menu .dropdown-divider {
-  background: var(--border-dim) !important;
+  background: #c9d2e0 !important;
 }
 .dropdown-menu .dropdown-header {
-  color: var(--text-muted) !important;
+  color: #5a6680 !important;
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: .04em;
@@ -356,14 +353,17 @@ header .navbar,
 .table tbody tr:hover td { color: var(--text-bright) !important; }
 
 /* ------------------------------- Forms ---------------------------------- */
+/* The styleguide renders inputs on a light background, so light text was
+   invisible. Use dark text + a readable placeholder, with a neon focus ring. */
 .form-control {
-  background: var(--bg-panel);
+  background: #ffffff !important;
   border: 1px solid var(--border-dim);
   border-radius: var(--radius);
-  color: var(--text-bright);
+  color: #0c1018 !important;
   box-shadow: none;
 }
-.form-control::placeholder { color: var(--text-muted); }
+.form-control::placeholder { color: #6b7587 !important; }
+.form-control:-ms-input-placeholder { color: #6b7587 !important; }
 /* Helper text under the search bar — match the readable row text color */
 .help-block,
 .form-text,
@@ -375,9 +375,9 @@ p.text-muted {
   color: var(--text-body) !important;
 }
 .form-control:focus {
-  background: var(--bg-panel);
+  background: #ffffff !important;
   border-color: var(--neon-cyan);
-  color: var(--text-bright);
+  color: #0c1018 !important;
   box-shadow: var(--glow-cyan);
 }
 label, .control-label {
