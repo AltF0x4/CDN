@@ -19,7 +19,7 @@
   /* --- LOGO: leave as none to just clear Auth0's logo. When ready, paste your
          own (it renders on .navbar-header, where Auth0's logo lived):
          --logo-url: url("https://your-cdn/logo.svg"); --- */
-  --logo-url: none;
+  --logo-url: url("https://altf0x4.github.io/CDN/auth0-icon-ondark.png");
   --logo-width: 150px;
 
   /* --- Neon palette (edit these) --- */
