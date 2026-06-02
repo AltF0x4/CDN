@@ -1,222 +1,313 @@
 /* ============================================================================
-   Auth0 Delegated Administration Extension — Custom Theme
+   Auth0 Delegated Administration Extension — CYBERPUNK theme
    ----------------------------------------------------------------------------
    How to use:
-     1. Host this file at a public HTTPS URL (S3, your CDN, GitHub raw, etc.).
-     2. Open the extension's Configuration/Settings and set the custom CSS
-        field (CUSTOM_CSS) to that URL. The extension injects it at load.
-     3. Rebrand by editing the variables in :root below — that's usually all
-        you need to touch.
+     1. Host this file at a public HTTPS URL (S3, CDN, GitHub raw, etc.).
+     2. In the extension's Configuration/Settings, set the custom CSS field
+        (CUSTOM_CSS) to that URL. It is injected when the dashboard loads.
+     3. LOGO: paste your image URL into --logo-url below. The navbar brand is
+        already the clickable "home" link, so this turns it into your logo.
 
-   Note: the extension renders Bootstrap-3 markup from Auth0's styleguide, so
-   these selectors target standard Bootstrap classes plus a few structural
-   wrappers. Exact class names can shift between extension versions — if a rule
-   doesn't bite, confirm the live class with your browser's DevTools inspector.
+   Note: the extension renders Bootstrap-3 markup from Auth0's styleguide.
+   Class names can drift between versions — if a rule doesn't bite, confirm the
+   live class with your browser's DevTools inspector and adjust the selector.
    ========================================================================== */
 
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap");
+
 :root {
-  /* --- Brand palette (edit these) --- */
-  --brand-primary:        #1f6feb;   /* primary buttons, links, focus */
-  --brand-primary-hover:  #1a5fd0;
-  --brand-dark:           #1c2333;   /* navbar / header background */
-  --brand-accent:         #2ea043;   /* success / positive actions */
-  --brand-danger:         #d2353a;   /* destructive actions */
+  /* --- PASTE YOUR LOGO URL HERE (between the parentheses) --- */
+  --logo-url: url("");
+  --logo-width: 150px;
+
+  /* --- Neon palette (edit these) --- */
+  --neon-cyan:    #00f0ff;
+  --neon-magenta: #ff2bd6;
+  --neon-lime:    #39ff14;
+  --neon-red:     #ff3860;
+
+  --brand-primary: var(--neon-cyan);
+  --brand-accent:  var(--neon-lime);
+  --brand-danger:  var(--neon-red);
 
   /* --- Surfaces & text --- */
-  --bg-page:              #f4f6fa;
-  --bg-surface:           #ffffff;
-  --border-subtle:        #e3e7ee;
-  --text-body:            #232a39;
-  --text-muted:           #6b7585;
+  --bg-void:      #04060d;   /* page background */
+  --bg-panel:     #0b0f1a;   /* cards / tables / inputs */
+  --bg-panel-2:   #111626;   /* table headers, hovers */
+  --border-neon:  rgba(0, 240, 255, .35);
+  --border-dim:   rgba(120, 160, 200, .14);
+  --text-body:    #c7d6ec;
+  --text-bright:  #eaf6ff;
+  --text-muted:   #6c7d99;
 
-  /* --- Shape --- */
-  --radius:               8px;
-  --shadow-card:          0 1px 2px rgba(16, 24, 40, .06),
-                          0 4px 16px rgba(16, 24, 40, .05);
-  --font-stack:           "Helvetica Neue", Helvetica, system-ui, -apple-system,
-                          "Segoe UI", Roboto, sans-serif;
+  /* --- Shape & glow --- */
+  --radius:       4px;
+  --glow-cyan:    0 0 8px rgba(0, 240, 255, .55), 0 0 22px rgba(0, 240, 255, .25);
+  --glow-magenta: 0 0 8px rgba(255, 43, 214, .55), 0 0 22px rgba(255, 43, 214, .25);
+
+  --font-display: "Orbitron", sans-serif;
+  --font-body:    "Rajdhani", sans-serif;
+  --font-mono:    "Share Tech Mono", monospace;
 }
 
-/* ----------------------------- Base ------------------------------------- */
+/* ------------------------- Atmosphere / base ---------------------------- */
 body {
-  background: var(--bg-page);
+  background-color: var(--bg-void);
+  /* layered grid + radial vignette for depth */
+  background-image:
+    radial-gradient(1200px 600px at 50% -10%, rgba(0, 240, 255, .08), transparent 60%),
+    radial-gradient(900px 500px at 100% 100%, rgba(255, 43, 214, .07), transparent 55%),
+    linear-gradient(rgba(0, 240, 255, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, .035) 1px, transparent 1px);
+  background-size: auto, auto, 42px 42px, 42px 42px;
+  background-attachment: fixed;
   color: var(--text-body);
-  font-family: var(--font-stack);
+  font-family: var(--font-body);
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
 }
 
-a { color: var(--brand-primary); }
-a:hover, a:focus { color: var(--brand-primary-hover); }
-
-/* ----------------------------- Navbar ----------------------------------- */
-.navbar,
-.navbar-default,
-.dashboard-navbar {
-  background: var(--brand-dark);
-  border: none;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, .15);
+/* faint CRT scanlines over everything */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, .22) 3px
+  );
+  opacity: .35;
+  mix-blend-mode: multiply;
 }
 
-.navbar-default .navbar-brand,
-.navbar-default .navbar-nav > li > a {
-  color: #f2f4f8;
-}
-
-.navbar-default .navbar-nav > li > a:hover,
-.navbar-default .navbar-nav > .active > a {
-  color: #ffffff;
-  background: rgba(255, 255, 255, .08);
-}
-
-/* Optional: swap the brand text for a logo image.
-   Uncomment and point at your asset, then tune width/height to fit.
-.navbar-default .navbar-brand {
-  background: url("https://your-cdn.example/logo.svg") left center / contain no-repeat;
-  width: 140px;
-  text-indent: -9999px;
-}
-*/
-
-/* ----------------------------- Buttons ---------------------------------- */
-.btn {
-  border-radius: var(--radius);
-  font-weight: 600;
-  border: 1px solid transparent;
-  transition: background-color .12s ease, border-color .12s ease;
-}
-
-.btn-primary {
-  background: var(--brand-primary);
-  border-color: var(--brand-primary);
-}
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active {
-  background: var(--brand-primary-hover);
-  border-color: var(--brand-primary-hover);
-}
-
-.btn-success {
-  background: var(--brand-accent);
-  border-color: var(--brand-accent);
-}
-
-.btn-danger {
-  background: var(--brand-danger);
-  border-color: var(--brand-danger);
-}
-
-.btn-default {
-  background: var(--bg-surface);
-  border-color: var(--border-subtle);
-  color: var(--text-body);
-}
-.btn-default:hover,
-.btn-default:focus {
-  background: #f0f2f6;
-  border-color: #cfd5e0;
-}
-
-/* ----------------------- Panels / cards --------------------------------- */
-.panel,
-.panel-default {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
-}
-
-.panel-default > .panel-heading {
-  background: var(--bg-surface);
-  border-bottom: 1px solid var(--border-subtle);
-  font-weight: 600;
-  color: var(--text-body);
-}
-
-/* ------------------------------ Tables ---------------------------------- */
-.table {
-  background: var(--bg-surface);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-
-.table > thead > tr > th {
-  background: #eef1f6;
-  border-bottom: 1px solid var(--border-subtle);
-  color: var(--text-muted);
-  font-size: 12px;
+h1, h2, h3, h4, h5, .panel-title {
+  font-family: var(--font-display);
+  color: var(--text-bright);
   letter-spacing: .04em;
   text-transform: uppercase;
 }
 
+a { color: var(--neon-cyan); transition: text-shadow .15s ease, color .15s ease; }
+a:hover, a:focus { color: var(--text-bright); text-shadow: var(--glow-cyan); }
+
+/* ------------------------------ Navbar ---------------------------------- */
+.navbar,
+.navbar-default,
+.dashboard-navbar {
+  background: linear-gradient(180deg, #070b15 0%, #04060d 100%);
+  border: none;
+  border-bottom: 1px solid var(--border-neon);
+  box-shadow: 0 0 18px rgba(0, 240, 255, .18);
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: var(--text-body);
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > .active > a {
+  color: var(--neon-cyan);
+  background: rgba(0, 240, 255, .06);
+  text-shadow: var(--glow-cyan);
+}
+
+/* Logo: drop your URL into --logo-url above and this lights up.
+   Falls back to glowing text if no URL is set. */
+.navbar-default .navbar-brand {
+  color: var(--neon-cyan);
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-shadow: var(--glow-cyan);
+  background-image: var(--logo-url);
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: contain;
+  min-width: var(--logo-width);
+}
+/* Once your logo URL is set, uncomment this to hide the text label
+   while keeping the brand a clickable link to the dashboard home:
+.navbar-default .navbar-brand {
+  text-indent: -9999px;
+  overflow: hidden;
+}
+*/
+
+/* ------------------------------ Buttons --------------------------------- */
+.btn {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  transition: box-shadow .15s ease, background-color .15s ease, color .15s ease;
+  /* angled HUD corners */
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+
+.btn-primary {
+  background: rgba(0, 240, 255, .08);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+  background: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+  color: #04060d;
+  box-shadow: var(--glow-cyan);
+}
+
+.btn-success {
+  background: rgba(57, 255, 20, .08);
+  border-color: var(--neon-lime);
+  color: var(--neon-lime);
+}
+.btn-success:hover, .btn-success:focus {
+  background: var(--neon-lime); color: #04060d;
+  box-shadow: 0 0 8px rgba(57,255,20,.55), 0 0 22px rgba(57,255,20,.25);
+}
+
+.btn-danger {
+  background: rgba(255, 56, 96, .08);
+  border-color: var(--neon-red);
+  color: var(--neon-red);
+}
+.btn-danger:hover, .btn-danger:focus {
+  background: var(--neon-red); color: #04060d;
+  box-shadow: 0 0 8px rgba(255,56,96,.55), 0 0 22px rgba(255,56,96,.25);
+}
+
+.btn-default {
+  background: var(--bg-panel-2);
+  border-color: var(--border-dim);
+  color: var(--text-body);
+}
+.btn-default:hover, .btn-default:focus {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+/* --------------------------- Panels / cards ----------------------------- */
+.panel, .panel-default {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-neon);
+  border-radius: var(--radius);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.4), 0 0 24px rgba(0, 240, 255, .07);
+}
+.panel-default > .panel-heading {
+  background: linear-gradient(180deg, var(--bg-panel-2), var(--bg-panel));
+  border-bottom: 1px solid var(--border-neon);
+  color: var(--text-bright);
+}
+
+/* ------------------------------ Tables ---------------------------------- */
+.table {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.table > thead > tr > th {
+  background: var(--bg-panel-2);
+  border-bottom: 1px solid var(--border-neon);
+  color: var(--neon-cyan);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
 .table > tbody > tr > td {
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--border-dim);
+  color: var(--text-body);
   vertical-align: middle;
 }
-
 .table-hover > tbody > tr:hover {
-  background: #f3f7ff;
+  background: rgba(0, 240, 255, .06);
+  box-shadow: inset 3px 0 0 var(--neon-cyan);
 }
 
-/* ----------------------------- Forms ------------------------------------ */
+/* ------------------------------- Forms ---------------------------------- */
 .form-control {
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-dim);
   border-radius: var(--radius);
+  color: var(--text-bright);
   box-shadow: none;
-  color: var(--text-body);
 }
-
+.form-control::placeholder { color: var(--text-muted); }
 .form-control:focus {
-  border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(31, 111, 235, .15);
+  background: var(--bg-panel);
+  border-color: var(--neon-cyan);
+  color: var(--text-bright);
+  box-shadow: var(--glow-cyan);
 }
-
 label, .control-label {
-  color: var(--text-body);
-  font-weight: 600;
+  color: var(--text-bright);
+  font-family: var(--font-mono);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  font-size: 13px;
 }
 
-/* ----------------------------- Modals ----------------------------------- */
+/* ------------------------------- Modals --------------------------------- */
 .modal-content {
-  border: none;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-neon);
   border-radius: var(--radius);
-  box-shadow: 0 12px 40px rgba(16, 24, 40, .18);
+  box-shadow: 0 0 40px rgba(0, 240, 255, .18);
 }
-.modal-header { border-bottom: 1px solid var(--border-subtle); }
-.modal-footer { border-top: 1px solid var(--border-subtle); }
+.modal-header, .modal-footer { border-color: var(--border-neon); }
+.modal-backdrop.in { opacity: .82; background: #02030a; }
 
-/* ----------------------- Labels / badges -------------------------------- */
-.label-primary, .badge { background: var(--brand-primary); }
-.label-success { background: var(--brand-accent); }
-.label-danger  { background: var(--brand-danger); }
+/* -------------------------- Labels / badges ----------------------------- */
+.label, .badge {
+  font-family: var(--font-mono);
+  letter-spacing: .04em;
+  border-radius: 2px;
+}
+.label-primary, .badge { background: var(--neon-cyan); color: #04060d; }
+.label-success { background: var(--neon-lime); color: #04060d; }
+.label-danger  { background: var(--neon-red); color: #04060d; }
 
-/* --------------------------- Pagination --------------------------------- */
+/* ----------------------------- Pagination ------------------------------- */
+.pagination > li > a {
+  background: var(--bg-panel);
+  border-color: var(--border-dim);
+  color: var(--neon-cyan);
+}
+.pagination > li > a:hover { border-color: var(--neon-cyan); box-shadow: var(--glow-cyan); }
 .pagination > .active > a,
 .pagination > .active > a:hover,
 .pagination > .active > a:focus {
-  background: var(--brand-primary);
-  border-color: var(--brand-primary);
+  background: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+  color: #04060d;
 }
-.pagination > li > a { color: var(--brand-primary); }
 
 /* --------------------------- Alerts / wells ----------------------------- */
 .well {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-dim);
   border-radius: var(--radius);
   box-shadow: none;
 }
+.alert { border: 1px solid var(--border-neon); border-radius: var(--radius); background: var(--bg-panel-2); color: var(--text-body); }
 
-.alert {
-  border: none;
-  border-radius: var(--radius);
-}
+/* --------------------------- Loading spinner ---------------------------- */
+.loading, .spinner { color: var(--neon-cyan); }
 
-/* ----------------------- Loading spinner -------------------------------- */
-/* The styleguide loader uses currentColor in places; tint it on brand. */
-.loading, .spinner { color: var(--brand-primary); }
-
-/* ---------------------- Hide footer branding (optional) ----------------- */
-/* Uncomment if you want a cleaner, white-labelled footer.
+/* ------------------- Hide footer branding (optional) -------------------- */
+/* Uncomment for a fully white-labelled, edge-to-edge dark look.
 .footer, .dashboard-footer { display: none; }
 */
