@@ -16,8 +16,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap");
 
 :root {
-  /* --- LOGO: leave as none to just hide Auth0's logo; when ready paste
-         your own: --logo-url: url("https://your-cdn/logo.svg"); --- */
+  /* --- LOGO: leave as none to just clear Auth0's logo. When ready, paste your
+         own (it renders on .navbar-header, where Auth0's logo lived):
+         --logo-url: url("https://your-cdn/logo.svg"); --- */
   --logo-url: none;
   --logo-width: 150px;
 
@@ -127,32 +128,34 @@ header .navbar,
   color: var(--text-bright) !important;
 }
 
-/* Hide Auth0's logo. It's usually a .logo span (background-image) or an <img>
-   inside the brand. We clear those and any brand background image. The
-   "ADMINISTRATION DASHBOARD" title is plain text, so it stays. */
-.navbar-brand img,
-.navbar-brand svg,
-.navbar-header img,
-.navbar [class*="logo"],
-.navbar-brand [class*="logo"],
-.logo {
-  display: none !important;
-}
-.navbar-brand,
-.navbar-default .navbar-brand {
-  background-image: var(--logo-url) !important;  /* none until you set --logo-url */
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: contain;
+/* Auth0's logo is a background-image on .navbar-header (not a child element),
+   which is why every display:none missed it. Override that background here.
+   This is also where YOUR logo goes: set --logo-url and it appears in place.
+   --logo-url defaults to none, which simply clears Auth0's mark. */
+.navbar-header {
+  background-image: var(--logo-url) !important;
+  background-repeat: no-repeat !important;
+  background-position: left center !important;
+  background-size: contain !important;
+  min-width: var(--logo-width);
 }
 
-/* Tenant dropdown / any light pill on the right of the header */
+/* Tenant name + dropdown on the right — force readable text (it was dark on
+   dark). Covers the toggle and any child spans/caret. */
 .navbar .dropdown-toggle,
+.navbar .dropdown-toggle *,
+.navbar-right,
+.navbar-right a,
+.navbar-right span,
+.navbar-right .btn,
+.navbar-right .dropdown-toggle,
+.navbar-text {
+  color: var(--text-bright) !important;
+}
 .navbar-right .btn,
 .navbar-right .dropdown-toggle {
   background: var(--bg-panel-2) !important;
   border: 1px solid var(--border-dim) !important;
-  color: var(--text-bright) !important;
 }
 
 /* ============================ TABS (Users / Logs) ======================== */
@@ -183,22 +186,14 @@ header .navbar,
   text-shadow: var(--glow-cyan);
 }
 
-/* Brand typography (kept separate from the header/hide rules above) */
+/* The .navbar-brand is the "ADMINISTRATION DASHBOARD" title — style it as text. */
 .navbar-default .navbar-brand {
   font-family: var(--font-display);
   font-weight: 900;
   letter-spacing: .12em;
   text-transform: uppercase;
   text-shadow: var(--glow-cyan);
-  min-width: var(--logo-width);
 }
-/* Once your logo URL is set, uncomment this to hide the text label
-   while keeping the brand a clickable link to the dashboard home:
-.navbar-default .navbar-brand {
-  text-indent: -9999px;
-  overflow: hidden;
-}
-*/
 
 /* ------------------------------ Buttons --------------------------------- */
 .btn {
@@ -304,6 +299,13 @@ header .navbar,
 .table tbody tr.success > td {
   background-color: rgba(0, 240, 255, .14) !important;
   color: var(--text-bright) !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+}
+/* single accent stripe at the start of the row only (no per-column bars) */
+.table tbody tr:hover > td:first-child,
+.table tbody tr.active > td:first-child,
+.table tbody tr.selected > td:first-child {
   box-shadow: inset 3px 0 0 var(--neon-cyan);
 }
 /* keep links/muted text inside a highlighted row legible */
@@ -322,6 +324,16 @@ header .navbar,
   box-shadow: none;
 }
 .form-control::placeholder { color: var(--text-muted); }
+/* Helper text under the search bar — match the readable row text color */
+.help-block,
+.form-text,
+.search-help,
+.search-bar + p,
+.search-bar small,
+small.text-muted,
+p.text-muted {
+  color: var(--text-body) !important;
+}
 .form-control:focus {
   background: var(--bg-panel);
   border-color: var(--neon-cyan);
