@@ -16,11 +16,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap");
 
 :root {
-  /* --- LOGO: leave as none to just clear Auth0's logo. When ready, paste your
-         own (it renders on .navbar-header, where Auth0's logo lived):
-         --logo-url: url("https://your-cdn/logo.svg"); --- */
+  /* --- LOGO --------------------------------------------------------------
+     Renders on .navbar-header, where Auth0's logo lived. Leave --logo-url as
+     none to just clear Auth0's mark; set it to your own to show your logo:
+       --logo-url: url("https://your-host/logo.svg");
+     Then tune the box it sits in with --logo-width / --logo-height.
+     Must be an absolute https URL. (Raw GitHub URLs are fine for images —
+     the stylesheet MIME restriction does NOT apply to background images.) */
   --logo-url: url("https://altf0x4.github.io/CDN/auth0-icon-ondark.png");
   --logo-width: 150px;
+  --logo-height: 34px;
 
   /* --- Neon palette (edit these) --- */
   --neon-cyan:    #00f0ff;
@@ -136,8 +141,10 @@ header .navbar,
   background-image: var(--logo-url) !important;
   background-repeat: no-repeat !important;
   background-position: left center !important;
-  background-size: contain !important;
+  /* size to the logo height so it can't collapse or scale oddly */
+  background-size: auto var(--logo-height) !important;
   min-width: var(--logo-width);
+  min-height: calc(var(--logo-height) + 16px);
 }
 
 /* Tenant name + dropdown on the right — force readable text (it was dark on
@@ -156,6 +163,39 @@ header .navbar,
 .navbar-right .dropdown-toggle {
   background: var(--bg-panel-2) !important;
   border: 1px solid var(--border-dim) !important;
+}
+
+/* The open dropdown menu (user/tenant menu) — was white with unreadable text.
+   Make it dark with readable items and a neon hover. */
+.dropdown-menu {
+  background: var(--bg-panel) !important;
+  border: 1px solid var(--border-neon) !important;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .55), 0 0 18px rgba(0, 240, 255, .15) !important;
+}
+.dropdown-menu > li > a,
+.dropdown-menu li a,
+.dropdown-menu .dropdown-item {
+  color: var(--text-body) !important;
+  background: transparent !important;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-menu li a:hover,
+.dropdown-menu .dropdown-item:hover {
+  color: var(--neon-cyan) !important;
+  background: rgba(0, 240, 255, .12) !important;
+  text-shadow: var(--glow-cyan);
+}
+.dropdown-menu .divider,
+.dropdown-menu .dropdown-divider {
+  background: var(--border-dim) !important;
+}
+.dropdown-menu .dropdown-header {
+  color: var(--text-muted) !important;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .04em;
 }
 
 /* ============================ TABS (Users / Logs) ======================== */
