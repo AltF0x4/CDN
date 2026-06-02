@@ -16,8 +16,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap");
 
 :root {
-  /* --- PASTE YOUR LOGO URL HERE (between the parentheses) --- */
-  --logo-url: url("https://altf0x4.github.io/CDN/auth0-icon-ondark.png");
+  /* --- LOGO: leave as none to just hide Auth0's logo; when ready paste
+         your own: --logo-url: url("https://your-cdn/logo.svg"); --- */
+  --logo-url: none;
   --logo-width: 150px;
 
   /* --- Neon palette (edit these) --- */
@@ -95,6 +96,9 @@ a { color: var(--neon-cyan); transition: text-shadow .15s ease, color .15s ease;
 a:hover, a:focus { color: var(--text-bright); text-shadow: var(--glow-cyan); }
 
 /* ------------------------------ Navbar ---------------------------------- */
+/* Constrain the bar to the same width as the content container/.row instead
+   of spanning the whole window. These max-widths mirror Bootstrap 3's
+   container breakpoints; tweak if your build uses a custom container width. */
 .navbar,
 .navbar-default,
 .dashboard-navbar {
@@ -102,6 +106,21 @@ a:hover, a:focus { color: var(--text-bright); text-shadow: var(--glow-cyan); }
   border: none;
   border-bottom: 1px solid var(--border-neon);
   box-shadow: 0 0 18px rgba(0, 240, 255, .18);
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: var(--radius);
+}
+@media (min-width: 768px)  { .navbar, .navbar-default, .dashboard-navbar { max-width: 750px; } }
+@media (min-width: 992px)  { .navbar, .navbar-default, .dashboard-navbar { max-width: 970px; } }
+@media (min-width: 1200px) { .navbar, .navbar-default, .dashboard-navbar { max-width: 1170px; } }
+
+/* Hide Auth0's default header logo (an <img>/.logo inside the brand).
+   Your own logo comes in via --logo-url on .navbar-brand below. */
+.navbar-default .navbar-brand img,
+.navbar-default .navbar-brand svg,
+.navbar-header .logo,
+.navbar-brand .logo {
+  display: none !important;
 }
 
 .navbar-default .navbar-nav > li > a {
@@ -111,10 +130,19 @@ a:hover, a:focus { color: var(--text-bright); text-shadow: var(--glow-cyan); }
   letter-spacing: .08em;
   text-transform: uppercase;
 }
+/* hover, focus, AND the clicked/active item — force readable contrast so the
+   label never washes out against a light styleguide background */
 .navbar-default .navbar-nav > li > a:hover,
-.navbar-default .navbar-nav > .active > a {
-  color: var(--neon-cyan);
-  background: rgba(0, 240, 255, .06);
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus,
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  color: var(--neon-cyan) !important;
+  background: rgba(0, 240, 255, .12) !important;
+  border-color: var(--border-neon) !important;
   text-shadow: var(--glow-cyan);
 }
 
@@ -232,10 +260,22 @@ a:hover, a:focus { color: var(--text-bright); text-shadow: var(--glow-cyan); }
   color: var(--text-body);
   vertical-align: middle;
 }
-.table-hover > tbody > tr:hover {
-  background: rgba(0, 240, 255, .06);
+/* Row highlight — applied to the cells so it beats the styleguide's light
+   hover/selected background; text forced bright so it stays readable. */
+.table-hover > tbody > tr:hover > td,
+.table > tbody > tr.active > td,
+.table > tbody > tr.active:hover > td,
+.table > tbody > tr.info > td,
+.table > tbody > tr.selected > td,
+.table > tbody > tr.success > td {
+  background-color: rgba(0, 240, 255, .14) !important;
+  color: var(--text-bright) !important;
   box-shadow: inset 3px 0 0 var(--neon-cyan);
 }
+/* keep any links inside a highlighted row legible too */
+.table-hover > tbody > tr:hover a,
+.table > tbody > tr.active a,
+.table > tbody > tr.selected a { color: var(--neon-cyan) !important; }
 
 /* ------------------------------- Forms ---------------------------------- */
 .form-control {
