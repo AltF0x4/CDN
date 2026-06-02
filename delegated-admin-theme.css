@@ -380,12 +380,15 @@ p.text-muted {
   color: #0c1018 !important;
   box-shadow: var(--glow-cyan);
 }
-label, .control-label {
-  color: var(--text-bright);
+label, .control-label,
+.modal label, .modal .control-label,
+.form-group label, .form-group .control-label {
+  color: var(--neon-cyan) !important;
   font-family: var(--font-mono);
   letter-spacing: .04em;
   text-transform: uppercase;
   font-size: 13px;
+  text-shadow: 0 0 6px rgba(0, 240, 255, .35);
 }
 
 /* ------------------------------- Modals --------------------------------- */
