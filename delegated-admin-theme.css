@@ -1,0 +1,222 @@
+/* ============================================================================
+   Auth0 Delegated Administration Extension — Custom Theme
+   ----------------------------------------------------------------------------
+   How to use:
+     1. Host this file at a public HTTPS URL (S3, your CDN, GitHub raw, etc.).
+     2. Open the extension's Configuration/Settings and set the custom CSS
+        field (CUSTOM_CSS) to that URL. The extension injects it at load.
+     3. Rebrand by editing the variables in :root below — that's usually all
+        you need to touch.
+
+   Note: the extension renders Bootstrap-3 markup from Auth0's styleguide, so
+   these selectors target standard Bootstrap classes plus a few structural
+   wrappers. Exact class names can shift between extension versions — if a rule
+   doesn't bite, confirm the live class with your browser's DevTools inspector.
+   ========================================================================== */
+
+:root {
+  /* --- Brand palette (edit these) --- */
+  --brand-primary:        #1f6feb;   /* primary buttons, links, focus */
+  --brand-primary-hover:  #1a5fd0;
+  --brand-dark:           #1c2333;   /* navbar / header background */
+  --brand-accent:         #2ea043;   /* success / positive actions */
+  --brand-danger:         #d2353a;   /* destructive actions */
+
+  /* --- Surfaces & text --- */
+  --bg-page:              #f4f6fa;
+  --bg-surface:           #ffffff;
+  --border-subtle:        #e3e7ee;
+  --text-body:            #232a39;
+  --text-muted:           #6b7585;
+
+  /* --- Shape --- */
+  --radius:               8px;
+  --shadow-card:          0 1px 2px rgba(16, 24, 40, .06),
+                          0 4px 16px rgba(16, 24, 40, .05);
+  --font-stack:           "Helvetica Neue", Helvetica, system-ui, -apple-system,
+                          "Segoe UI", Roboto, sans-serif;
+}
+
+/* ----------------------------- Base ------------------------------------- */
+body {
+  background: var(--bg-page);
+  color: var(--text-body);
+  font-family: var(--font-stack);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--brand-primary); }
+a:hover, a:focus { color: var(--brand-primary-hover); }
+
+/* ----------------------------- Navbar ----------------------------------- */
+.navbar,
+.navbar-default,
+.dashboard-navbar {
+  background: var(--brand-dark);
+  border: none;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .15);
+}
+
+.navbar-default .navbar-brand,
+.navbar-default .navbar-nav > li > a {
+  color: #f2f4f8;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > .active > a {
+  color: #ffffff;
+  background: rgba(255, 255, 255, .08);
+}
+
+/* Optional: swap the brand text for a logo image.
+   Uncomment and point at your asset, then tune width/height to fit.
+.navbar-default .navbar-brand {
+  background: url("https://your-cdn.example/logo.svg") left center / contain no-repeat;
+  width: 140px;
+  text-indent: -9999px;
+}
+*/
+
+/* ----------------------------- Buttons ---------------------------------- */
+.btn {
+  border-radius: var(--radius);
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: background-color .12s ease, border-color .12s ease;
+}
+
+.btn-primary {
+  background: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background: var(--brand-primary-hover);
+  border-color: var(--brand-primary-hover);
+}
+
+.btn-success {
+  background: var(--brand-accent);
+  border-color: var(--brand-accent);
+}
+
+.btn-danger {
+  background: var(--brand-danger);
+  border-color: var(--brand-danger);
+}
+
+.btn-default {
+  background: var(--bg-surface);
+  border-color: var(--border-subtle);
+  color: var(--text-body);
+}
+.btn-default:hover,
+.btn-default:focus {
+  background: #f0f2f6;
+  border-color: #cfd5e0;
+}
+
+/* ----------------------- Panels / cards --------------------------------- */
+.panel,
+.panel-default {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+.panel-default > .panel-heading {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  font-weight: 600;
+  color: var(--text-body);
+}
+
+/* ------------------------------ Tables ---------------------------------- */
+.table {
+  background: var(--bg-surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.table > thead > tr > th {
+  background: #eef1f6;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.table > tbody > tr > td {
+  border-top: 1px solid var(--border-subtle);
+  vertical-align: middle;
+}
+
+.table-hover > tbody > tr:hover {
+  background: #f3f7ff;
+}
+
+/* ----------------------------- Forms ------------------------------------ */
+.form-control {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  box-shadow: none;
+  color: var(--text-body);
+}
+
+.form-control:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(31, 111, 235, .15);
+}
+
+label, .control-label {
+  color: var(--text-body);
+  font-weight: 600;
+}
+
+/* ----------------------------- Modals ----------------------------------- */
+.modal-content {
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: 0 12px 40px rgba(16, 24, 40, .18);
+}
+.modal-header { border-bottom: 1px solid var(--border-subtle); }
+.modal-footer { border-top: 1px solid var(--border-subtle); }
+
+/* ----------------------- Labels / badges -------------------------------- */
+.label-primary, .badge { background: var(--brand-primary); }
+.label-success { background: var(--brand-accent); }
+.label-danger  { background: var(--brand-danger); }
+
+/* --------------------------- Pagination --------------------------------- */
+.pagination > .active > a,
+.pagination > .active > a:hover,
+.pagination > .active > a:focus {
+  background: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+.pagination > li > a { color: var(--brand-primary); }
+
+/* --------------------------- Alerts / wells ----------------------------- */
+.well {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+
+.alert {
+  border: none;
+  border-radius: var(--radius);
+}
+
+/* ----------------------- Loading spinner -------------------------------- */
+/* The styleguide loader uses currentColor in places; tint it on brand. */
+.loading, .spinner { color: var(--brand-primary); }
+
+/* ---------------------- Hide footer branding (optional) ----------------- */
+/* Uncomment if you want a cleaner, white-labelled footer.
+.footer, .dashboard-footer { display: none; }
+*/
