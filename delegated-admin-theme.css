@@ -95,70 +95,101 @@ h1, h2, h3, h4, h5, .panel-title {
 a { color: var(--neon-cyan); transition: text-shadow .15s ease, color .15s ease; }
 a:hover, a:focus { color: var(--text-bright); text-shadow: var(--glow-cyan); }
 
-/* ------------------------------ Navbar ---------------------------------- */
-/* Constrain the bar to the same width as the content container/.row instead
-   of spanning the whole window. These max-widths mirror Bootstrap 3's
-   container breakpoints; tweak if your build uses a custom container width. */
+/* ============================== HEADER (top bar) ========================= */
+/* The main top bar ships white from the styleguide and uses a higher-
+   specificity rule, so we force it dark with !important. Selector list is
+   broad on purpose to catch whatever wrapper your version uses. If it's still
+   white, inspect the bar and send me its class — I'll pin it exactly. */
 .navbar,
 .navbar-default,
-.dashboard-navbar {
-  background: linear-gradient(180deg, #070b15 0%, #04060d 100%);
-  border: none;
-  border-bottom: 1px solid var(--border-neon);
-  box-shadow: 0 0 18px rgba(0, 240, 255, .18);
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: var(--radius);
+.navbar-fixed-top,
+.navbar-static-top,
+.dashboard-navbar,
+.dashboard-header,
+.dashboard__header,
+header.navbar,
+header .navbar,
+.topbar,
+.top-bar,
+.a0-header {
+  background-color: #060912 !important;
+  background-image: linear-gradient(180deg, #0a0f1c 0%, #04060d 100%) !important;
+  border: none !important;
+  border-bottom: 1px solid var(--border-neon) !important;
+  box-shadow: 0 0 18px rgba(0, 240, 255, .18) !important;
+  border-radius: 0;
 }
-@media (min-width: 768px)  { .navbar, .navbar-default, .dashboard-navbar { max-width: 750px; } }
-@media (min-width: 992px)  { .navbar, .navbar-default, .dashboard-navbar { max-width: 970px; } }
-@media (min-width: 1200px) { .navbar, .navbar-default, .dashboard-navbar { max-width: 1170px; } }
 
-/* Hide Auth0's default header logo (an <img>/.logo inside the brand).
-   Your own logo comes in via --logo-url on .navbar-brand below. */
-.navbar-default .navbar-brand img,
-.navbar-default .navbar-brand svg,
-.navbar-header .logo,
-.navbar-brand .logo {
+/* Title text in the header */
+.navbar-brand,
+.navbar-default .navbar-brand,
+.navbar-text {
+  color: var(--text-bright) !important;
+}
+
+/* Hide Auth0's logo. It's usually a .logo span (background-image) or an <img>
+   inside the brand. We clear those and any brand background image. The
+   "ADMINISTRATION DASHBOARD" title is plain text, so it stays. */
+.navbar-brand img,
+.navbar-brand svg,
+.navbar-header img,
+.navbar [class*="logo"],
+.navbar-brand [class*="logo"],
+.logo {
   display: none !important;
 }
+.navbar-brand,
+.navbar-default .navbar-brand {
+  background-image: var(--logo-url) !important;  /* none until you set --logo-url */
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: contain;
+}
 
-.navbar-default .navbar-nav > li > a {
+/* Tenant dropdown / any light pill on the right of the header */
+.navbar .dropdown-toggle,
+.navbar-right .btn,
+.navbar-right .dropdown-toggle {
+  background: var(--bg-panel-2) !important;
+  border: 1px solid var(--border-dim) !important;
+  color: var(--text-bright) !important;
+}
+
+/* ============================ TABS (Users / Logs) ======================== */
+/* Just a neon-lit label + glow on the active/hover state — no box, no border,
+   no filled background. */
+.navbar-default .navbar-nav > li > a,
+.nav-tabs > li > a {
   color: var(--text-body);
   font-family: var(--font-display);
   font-size: 13px;
   letter-spacing: .08em;
   text-transform: uppercase;
+  background: transparent !important;
+  border: none !important;
 }
-/* hover, focus, AND the clicked/active item — force readable contrast so the
-   label never washes out against a light styleguide background */
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus,
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus,
+.nav-tabs > li > a:hover,
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
   color: var(--neon-cyan) !important;
-  background: rgba(0, 240, 255, .12) !important;
-  border-color: var(--border-neon) !important;
+  background: transparent !important;
+  border: none !important;
   text-shadow: var(--glow-cyan);
 }
 
-/* Logo: drop your URL into --logo-url above and this lights up.
-   Falls back to glowing text if no URL is set. */
+/* Brand typography (kept separate from the header/hide rules above) */
 .navbar-default .navbar-brand {
-  color: var(--neon-cyan);
   font-family: var(--font-display);
   font-weight: 900;
   letter-spacing: .12em;
   text-transform: uppercase;
   text-shadow: var(--glow-cyan);
-  background-image: var(--logo-url);
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: contain;
   min-width: var(--logo-width);
 }
 /* Once your logo URL is set, uncomment this to hide the text label
@@ -260,22 +291,27 @@ a:hover, a:focus { color: var(--text-bright); text-shadow: var(--glow-cyan); }
   color: var(--text-body);
   vertical-align: middle;
 }
-/* Row highlight — applied to the cells so it beats the styleguide's light
-   hover/selected background; text forced bright so it stays readable. */
-.table-hover > tbody > tr:hover > td,
-.table > tbody > tr.active > td,
-.table > tbody > tr.active:hover > td,
-.table > tbody > tr.info > td,
-.table > tbody > tr.selected > td,
-.table > tbody > tr.success > td {
+/* Row highlight — the table may not carry .table-hover, so we don't require
+   it. Force a dark neon-tinted highlight with bright text, beating the
+   styleguide's light hover/selected background. */
+.table tbody tr:hover,
+.table tbody tr:hover > td,
+.table tbody tr:hover > th,
+.table tbody tr.active > td,
+.table tbody tr.active:hover > td,
+.table tbody tr.info > td,
+.table tbody tr.selected > td,
+.table tbody tr.success > td {
   background-color: rgba(0, 240, 255, .14) !important;
   color: var(--text-bright) !important;
   box-shadow: inset 3px 0 0 var(--neon-cyan);
 }
-/* keep any links inside a highlighted row legible too */
-.table-hover > tbody > tr:hover a,
-.table > tbody > tr.active a,
-.table > tbody > tr.selected a { color: var(--neon-cyan) !important; }
+/* keep links/muted text inside a highlighted row legible */
+.table tbody tr:hover a,
+.table tbody tr.active a,
+.table tbody tr.selected a { color: var(--neon-cyan) !important; }
+.table tbody tr:hover .text-muted,
+.table tbody tr:hover td { color: var(--text-bright) !important; }
 
 /* ------------------------------- Forms ---------------------------------- */
 .form-control {
