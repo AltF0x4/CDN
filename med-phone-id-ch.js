@@ -117,13 +117,12 @@ async function boot() {
   }
 
   function formatPhone(p) {
-    // Show the real number, lightly grouped; no heavy masking — the patient
-    // needs to confirm it's the number they typed.
-    const s = String(p).replace(/\s+/g, "");
-    const m = s.match(/^(\+\d{1,3})(\d+)$/);
-    if (!m) return s;
-    const rest = m[2].replace(/(\d{3})(?=\d)/g, "$1 ");
-    return `${m[1]} ${rest}`;
+    // Show the real number, grouped from the right in 3s. The patient needs to
+    // confirm it's what they typed, so no heavy masking and no country-code guessing.
+    const s = String(p).replace(/[^\d+]/g, "");
+    const plus = s.startsWith("+") ? "+" : "";
+    const digits = s.replace(/\D/g, "");
+    return plus + digits.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
   function showError(msg) {
     errEl.textContent = "⚠ " + msg;
