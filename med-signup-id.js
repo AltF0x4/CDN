@@ -126,15 +126,34 @@ async function boot() {
       const loginUrl = acul?.transaction?.loginLink;
       if (loginUrl) $("loginLink").href = loginUrl;
 
-      // Replay any server-side errors from a previous attempt.
+      // Refill what the patient already entered (e.g. after "edit email"),
+      // so they can correct instead of retyping the whole form.
+      const pre = acul?.untrustedData?.submittedFormData || acul?.screen?.data || {};
+      if (pre.email) $("email").value = pre.email;
+      if (pre.given_name) $("firstName").value = pre.given_name;
+      if (pre.family_name) $("lastName").value = pre.family_name;
+      if (pre.phone) applyPhone(pre.phone);
+
+      // Only replay a server error if that field is still empty/invalid now —
+      // otherwise coming back to edit shows false "required" errors.
       (acul?.transaction?.errors || []).forEach((err) => {
         const tag = (err.field || err.code || "").toLowerCase();
-        if (tag.includes("phone")) showError("phone", err.message);
-        if (tag.includes("email")) showError("email", err.message);
+        if (tag.includes("email") && !validEmail($("email").value)) showError("email", err.message);
+        if (tag.includes("phone") && !validPhone($("phone").value)) showError("phone", err.message);
       });
     } catch (e) {
       console.warn("[acul] init failed; demo mode.", e);
     }
+  }
+
+  // Split a stored E.164 number back into the country prefix + local part.
+  function applyPhone(full) {
+    const f = String(full);
+    const prefixes = Array.from($("countryCode").options)
+      .map((o) => o.value).sort((a, b) => b.length - a.length);
+    const match = prefixes.find((p) => f.startsWith(p));
+    if (match) { $("countryCode").value = match; $("phone").value = f.slice(match.length); }
+    else { $("phone").value = f.replace(/^\+/, ""); }
   }
 
   /* --- validation: phone is REQUIRED --- */
@@ -143,11 +162,11 @@ async function boot() {
     $("f-" + which).classList.add("invalid");
   }
   function clearError(which) { $("f-" + which).classList.remove("invalid"); }
-  const validEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
-  const validPhone = (v) => {
-    const d = v.replace(/[^\d]/g, "");
+  function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v).trim()); }
+  function validPhone(v) {
+    const d = String(v).replace(/[^\d]/g, "");
     return d.length >= 6 && d.length <= 14;
-  };
+  }
 
   ["email", "phone"].forEach((id) =>
     $(id).addEventListener("input", () => clearError(id))
