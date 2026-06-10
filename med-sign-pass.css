@@ -1,0 +1,232 @@
+/* ===========================================================================
+   Auth0 ACUL · signup-password screen
+   "VITAL://NET" cyberpunk-clinical theme · pairs with signup-password.js
+   =========================================================================== */
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap");
+
+:root {
+  --bg:        #050810;
+  --bg-2:      #070c18;
+  --surface:   #0b1322;
+  --surface-2: #0e1828;
+  --line:      #15263c;
+  --cyan:      #00e5d4;
+  --cyan-soft: #38f0e2;
+  --magenta:   #ff2e7e;
+  --amber:     #ffb347;
+  --green:     #25e69a;
+  --text:      #d8e6f2;
+  --muted:     #6c829b;
+  --muted-2:   #46586e;
+  --glow-cyan: 0 0 0.5rem rgba(0,229,212,.55), 0 0 1.4rem rgba(0,229,212,.25);
+  --glow-mag:  0 0 0.5rem rgba(255,46,126,.6), 0 0 1.4rem rgba(255,46,126,.3);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; min-height: 100%;
+  background: var(--bg); color: var(--text);
+  font-family: "Rajdhani", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -2;
+  background:
+    radial-gradient(1100px 700px at 50% -10%, rgba(0,229,212,.10), transparent 60%),
+    radial-gradient(900px 600px at 110% 120%, rgba(255,46,126,.08), transparent 55%),
+    linear-gradient(var(--bg-2), var(--bg));
+}
+body::after {
+  content: ""; position: fixed; inset: -2px; z-index: -1;
+  background-image:
+    linear-gradient(rgba(0,229,212,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,212,.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 90%);
+  animation: drift 32s linear infinite;
+}
+@keyframes drift { to { background-position: 44px 44px, 44px 44px; } }
+
+.stage { min-height: 100vh; display: grid; place-items: center; padding: 28px 16px; }
+
+/* ---- Card ---- */
+.card {
+  position: relative; width: 100%; max-width: 432px;
+  background: linear-gradient(180deg, rgba(14,24,40,.92), rgba(8,14,26,.94));
+  border: 1px solid var(--line); border-radius: 14px;
+  padding: 0 0 30px; overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0,229,212,.06),
+    0 30px 80px -30px rgba(0,0,0,.9),
+    inset 0 1px 0 rgba(255,255,255,.03);
+}
+.card .bracket {
+  position: absolute; width: 18px; height: 18px;
+  border: 2px solid var(--cyan); opacity: .7; pointer-events: none;
+}
+.bracket.tl { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
+.bracket.tr { top: 10px; right: 10px; border-left: 0; border-bottom: 0; }
+.bracket.bl { bottom: 10px; left: 10px; border-right: 0; border-top: 0; }
+.bracket.br { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
+
+/* ---- ECG header ---- */
+.ecg {
+  position: relative; height: 64px; border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(0,229,212,.08), transparent); overflow: hidden;
+}
+.ecg svg { position: absolute; inset: 0; width: 200%; height: 100%; }
+.ecg .trace {
+  fill: none; stroke: var(--cyan); stroke-width: 2;
+  filter: drop-shadow(0 0 4px rgba(0,229,212,.9)); animation: sweep 4.5s linear infinite;
+}
+@keyframes sweep { to { transform: translateX(-50%); } }
+.ecg .status {
+  position: absolute; top: 9px; left: 16px;
+  font-family: "Share Tech Mono", monospace; font-size: 10.5px; letter-spacing: .12em;
+  color: var(--cyan-soft); text-shadow: var(--glow-cyan);
+}
+.ecg .status .dot {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cyan); margin-right: 6px; vertical-align: middle;
+  box-shadow: var(--glow-cyan); animation: blink 1.6s steps(2) infinite;
+}
+@keyframes blink { 50% { opacity: .25; } }
+
+/* ---- Head ---- */
+.head { position: relative; text-align: center; padding: 26px 32px 6px; }
+.back-top {
+  position: absolute; top: 18px; left: 22px;
+  background: none; border: 0; padding: 4px 6px 4px 2px; cursor: pointer;
+  font-family: "Share Tech Mono", monospace; font-size: 11px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+  transition: color .16s, text-shadow .16s, transform .12s;
+}
+.back-top:hover { color: var(--cyan-soft); text-shadow: var(--glow-cyan); transform: translateX(-2px); }
+.logo { display: inline-flex; }
+.logo svg { filter: drop-shadow(0 0 8px rgba(0,229,212,.5)); }
+.eyebrow {
+  margin: 14px 0 0; font-family: "Share Tech Mono", monospace;
+  font-size: 10.5px; letter-spacing: .26em; text-transform: uppercase; color: var(--cyan-soft);
+}
+.title {
+  margin: 6px 0 4px; font-family: "Chakra Petch", sans-serif;
+  font-weight: 700; font-size: 25px; letter-spacing: .01em; color: #f2f9ff;
+}
+.title .glyph { color: var(--magenta); text-shadow: var(--glow-mag); }
+.sub { margin: 0; color: var(--muted); font-size: 13.5px; letter-spacing: .02em; }
+
+/* ---- Body ---- */
+.body { padding: 20px 32px 0; display: grid; gap: 14px; }
+
+/* identity chip: the email being registered */
+.identity {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--cyan);
+  border-radius: 8px;
+}
+.identity .ico { color: var(--cyan); flex: 0 0 auto; filter: drop-shadow(0 0 4px rgba(0,229,212,.6)); }
+.identity .id-text { min-width: 0; flex: 1 1 auto; }
+.identity .id-label {
+  display: block; font-family: "Share Tech Mono", monospace;
+  font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted);
+}
+.identity .id-value {
+  display: block; font-size: 15px; font-weight: 600; color: var(--text);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.identity .edit {
+  flex: 0 0 auto; background: none; border: 0; cursor: pointer;
+  font-family: "Share Tech Mono", monospace; font-size: 10.5px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--cyan-soft); padding: 4px;
+}
+.identity .edit:hover { text-shadow: var(--glow-cyan); }
+
+/* password field */
+.field { position: relative; }
+.field label {
+  display: flex; align-items: center; gap: 6px;
+  font-family: "Share Tech Mono", monospace; font-size: 10.5px;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
+}
+.req { color: var(--magenta); text-shadow: var(--glow-mag); }
+
+.pw-wrap { position: relative; }
+.control {
+  width: 100%; height: 46px; padding: 0 56px 0 14px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  color: var(--text); font-family: "Rajdhani", sans-serif; font-size: 16px; font-weight: 500;
+  letter-spacing: .01em; outline: none;
+  transition: border-color .18s, box-shadow .18s, background .18s;
+}
+.control::placeholder { color: var(--muted-2); }
+.control:focus { border-color: var(--cyan); background: var(--surface-2); box-shadow: var(--glow-cyan); }
+.toggle {
+  position: absolute; top: 0; right: 0; height: 46px; width: 52px;
+  background: none; border: 0; cursor: pointer;
+  font-family: "Share Tech Mono", monospace; font-size: 10.5px;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+}
+.toggle:hover { color: var(--cyan-soft); }
+
+/* strength meter */
+.meter { display: flex; gap: 5px; margin-top: 9px; }
+.meter span {
+  flex: 1; height: 3px; border-radius: 2px; background: var(--line); transition: background .2s;
+}
+.meter[data-score="1"] span:nth-child(-n+1),
+.meter[data-score="2"] span:nth-child(-n+2),
+.meter[data-score="3"] span:nth-child(-n+3),
+.meter[data-score="4"] span:nth-child(-n+4) { background: var(--cyan); box-shadow: var(--glow-cyan); }
+.meter[data-score="1"] span:nth-child(-n+1) { background: var(--magenta); box-shadow: var(--glow-mag); }
+.meter[data-score="2"] span:nth-child(-n+2) { background: var(--amber); box-shadow: none; }
+
+.rules { margin: 8px 2px 0; display: grid; gap: 4px; }
+.rule {
+  font-family: "Share Tech Mono", monospace; font-size: 11px; letter-spacing: .03em; color: var(--muted-2);
+}
+.rule.ok { color: var(--green); }
+.rule .mark { display: inline-block; width: 14px; }
+
+.err {
+  min-height: 14px; margin: 6px 2px 0;
+  font-family: "Share Tech Mono", monospace; font-size: 11px; letter-spacing: .04em; color: var(--magenta);
+}
+
+/* ---- Submit ---- */
+.submit {
+  margin-top: 4px; height: 50px; border: 0; border-radius: 8px; cursor: pointer;
+  position: relative; overflow: hidden;
+  background: linear-gradient(100deg, var(--cyan), #14b8c7 55%, var(--cyan));
+  color: #02161a; font-family: "Chakra Petch", sans-serif;
+  font-weight: 700; font-size: 15px; letter-spacing: .14em; text-transform: uppercase;
+  box-shadow: var(--glow-cyan);
+  transition: transform .12s, filter .18s, box-shadow .18s, opacity .18s;
+}
+.submit:hover:not(:disabled) { filter: brightness(1.08); box-shadow: 0 0 1rem rgba(0,229,212,.7), 0 0 2.4rem rgba(0,229,212,.35); }
+.submit:active:not(:disabled) { transform: translateY(1px); }
+.submit:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+.submit::after {
+  content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+  transform: skewX(-20deg); animation: shine 3.6s ease-in-out infinite;
+}
+.submit:disabled::after { display: none; }
+@keyframes shine { 0%,70% { left: -60%; } 100% { left: 140%; } }
+
+.foot { margin: 16px 0 0; text-align: center; font-size: 13.5px; color: var(--muted); }
+.foot a { color: var(--cyan-soft); text-decoration: none; font-weight: 600; }
+.foot a:hover { text-shadow: var(--glow-cyan); }
+
+/* a11y */
+.control:focus-visible, .submit:focus-visible, .toggle:focus-visible,
+.identity .edit:focus-visible, .back-top:focus-visible, .foot a:focus-visible {
+  outline: 2px solid var(--cyan-soft); outline-offset: 2px; border-radius: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ecg .trace, body::after, .submit::after, .ecg .status .dot { animation: none; }
+}
