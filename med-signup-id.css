@@ -1,0 +1,249 @@
+/* ===========================================================================
+   Auth0 ACUL · signup-id screen  ·  "VITAL://NET" cyberpunk-clinical theme
+   Pairs with signup-id.js
+   =========================================================================== */
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap");
+
+:root {
+  --bg:        #050810;
+  --bg-2:      #070c18;
+  --surface:   #0b1322;
+  --surface-2: #0e1828;
+  --line:      #15263c;
+  --cyan:      #00e5d4;
+  --cyan-soft: #38f0e2;
+  --magenta:   #ff2e7e;
+  --amber:     #ffb347;
+  --text:      #d8e6f2;
+  --muted:     #6c829b;
+  --muted-2:   #46586e;
+  --glow-cyan: 0 0 0.5rem rgba(0,229,212,.55), 0 0 1.4rem rgba(0,229,212,.25);
+  --glow-mag:  0 0 0.5rem rgba(255,46,126,.6), 0 0 1.4rem rgba(255,46,126,.3);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Rajdhani", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ambient backdrop: grid + radial wash + slow drift */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(1100px 700px at 50% -10%, rgba(0,229,212,.10), transparent 60%),
+    radial-gradient(900px 600px at 110% 120%, rgba(255,46,126,.08), transparent 55%),
+    linear-gradient(var(--bg-2), var(--bg));
+  z-index: -2;
+}
+body::after {
+  content: "";
+  position: fixed; inset: -2px;
+  background-image:
+    linear-gradient(rgba(0,229,212,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,212,.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 90%);
+  z-index: -1;
+  animation: drift 32s linear infinite;
+}
+@keyframes drift { to { background-position: 44px 44px, 44px 44px; } }
+
+.stage {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 28px 16px;
+}
+
+/* ---- The card / terminal ---- */
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 432px;
+  background: linear-gradient(180deg, rgba(14,24,40,.92), rgba(8,14,26,.94));
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0 0 30px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0,229,212,.06),
+    0 30px 80px -30px rgba(0,0,0,.9),
+    inset 0 1px 0 rgba(255,255,255,.03);
+}
+.card .bracket {
+  position: absolute; width: 18px; height: 18px;
+  border: 2px solid var(--cyan);
+  opacity: .7; pointer-events: none;
+}
+.bracket.tl { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
+.bracket.tr { top: 10px; right: 10px; border-left: 0; border-bottom: 0; }
+.bracket.bl { bottom: 10px; left: 10px; border-right: 0; border-top: 0; }
+.bracket.br { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
+
+/* ---- Signature element: live ECG header ---- */
+.ecg {
+  position: relative;
+  height: 64px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(0,229,212,.08), transparent);
+  overflow: hidden;
+}
+.ecg svg { position: absolute; inset: 0; width: 200%; height: 100%; }
+.ecg .trace {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 4px rgba(0,229,212,.9));
+  animation: sweep 4.5s linear infinite;
+}
+@keyframes sweep { to { transform: translateX(-50%); } }
+.ecg .status {
+  position: absolute; top: 9px; left: 16px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10.5px; letter-spacing: .12em;
+  color: var(--cyan-soft);
+  text-shadow: var(--glow-cyan);
+}
+.ecg .status .dot {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cyan); margin-right: 6px; vertical-align: middle;
+  box-shadow: var(--glow-cyan); animation: blink 1.6s steps(2) infinite;
+}
+@keyframes blink { 50% { opacity: .25; } }
+
+/* ---- Brand head ---- */
+.head { text-align: center; padding: 26px 32px 6px; }
+.logo { display: inline-flex; }
+.logo svg { filter: drop-shadow(0 0 8px rgba(0,229,212,.5)); }
+.eyebrow {
+  margin: 14px 0 0;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10.5px; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--cyan-soft);
+}
+.title {
+  margin: 6px 0 4px;
+  font-family: "Chakra Petch", sans-serif;
+  font-weight: 700; font-size: 25px; letter-spacing: .01em;
+  color: #f2f9ff;
+}
+.title .glyph { color: var(--magenta); text-shadow: var(--glow-mag); }
+.sub { margin: 0; color: var(--muted); font-size: 13.5px; letter-spacing: .02em; }
+.sub b { color: var(--cyan-soft); font-weight: 600; }
+
+/* ---- Form ---- */
+form { padding: 22px 32px 0; display: grid; gap: 14px; }
+
+.field { position: relative; }
+.field label {
+  display: flex; align-items: center; gap: 6px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 5px;
+}
+.req { color: var(--magenta); text-shadow: var(--glow-mag); }
+.opt { color: var(--muted-2); text-transform: none; letter-spacing: .05em; }
+
+.control {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 16px; font-weight: 500;
+  letter-spacing: .01em;
+  outline: none;
+  transition: border-color .18s, box-shadow .18s, background .18s;
+}
+.control::placeholder { color: var(--muted-2); }
+.control:hover { border-color: #20364f; }
+.control:focus {
+  border-color: var(--cyan);
+  background: var(--surface-2);
+  box-shadow: var(--glow-cyan);
+}
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* phone group: country prefix + number */
+.phone-grp { display: grid; grid-template-columns: 132px 1fr; gap: 10px; }
+.cc {
+  appearance: none;
+  background:
+    var(--surface)
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' fill='none' stroke='%2300e5d4' stroke-width='1.6'/></svg>")
+    no-repeat right 12px center;
+  padding-right: 30px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 13px;
+}
+.cc option { background: #0b1322; color: var(--text); }
+
+/* the required-phone field gets a subtle persistent cue */
+#phone { border-color: rgba(255,46,126,.28); }
+#phone:focus { border-color: var(--cyan); }
+
+.err {
+  display: none;
+  margin-top: 6px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 11px; letter-spacing: .04em;
+  color: var(--magenta);
+}
+.field.invalid .control { border-color: var(--magenta); box-shadow: var(--glow-mag); }
+.field.invalid .err { display: block; }
+
+/* ---- Submit ---- */
+.submit {
+  margin-top: 6px;
+  height: 50px;
+  border: 0; border-radius: 8px;
+  cursor: pointer;
+  position: relative; overflow: hidden;
+  background: linear-gradient(100deg, var(--cyan), #14b8c7 55%, var(--cyan));
+  color: #02161a;
+  font-family: "Chakra Petch", sans-serif;
+  font-weight: 700; font-size: 15px;
+  letter-spacing: .14em; text-transform: uppercase;
+  box-shadow: var(--glow-cyan);
+  transition: transform .12s, filter .18s, box-shadow .18s;
+}
+.submit:hover { filter: brightness(1.08); box-shadow: 0 0 1rem rgba(0,229,212,.7), 0 0 2.4rem rgba(0,229,212,.35); }
+.submit:active { transform: translateY(1px); }
+.submit:disabled { filter: grayscale(.4) brightness(.8); cursor: progress; }
+.submit::after { /* scanline shimmer */
+  content: ""; position: absolute; top: 0; left: -60%;
+  width: 40%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+  transform: skewX(-20deg);
+  animation: shine 3.6s ease-in-out infinite;
+}
+@keyframes shine { 0%,70% { left: -60%; } 100% { left: 140%; } }
+
+.foot { margin: 18px 0 0; text-align: center; font-size: 13.5px; color: var(--muted); }
+.foot a {
+  color: var(--cyan-soft); text-decoration: none; font-weight: 600; letter-spacing: .02em;
+}
+.foot a:hover { text-shadow: var(--glow-cyan); }
+
+/* a11y */
+.control:focus-visible, .submit:focus-visible, .foot a:focus-visible {
+  outline: 2px solid var(--cyan-soft); outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ecg .trace, body::after, .submit::after, .ecg .status .dot { animation: none; }
+}
+@media (max-width: 420px) {
+  .row2 { grid-template-columns: 1fr; }
+  .phone-grp { grid-template-columns: 116px 1fr; }
+}
