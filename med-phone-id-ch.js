@@ -105,16 +105,25 @@ async function boot() {
     try {
       acul = new Ctor();
       const phone = acul?.screen?.data?.phone || acul?.screen?.data?.phoneNumber;
-      if (phone) $("phoneMask").textContent = maskPhone(phone);
+      if (phone) $("phoneMask").textContent = formatPhone(phone);
       (acul?.transaction?.errors || []).forEach((e) => showError(e.message || "Invalid code."));
     } catch (e) {
       console.warn("[acul] init failed; demo mode.", e);
     }
   }
+  // Demo fallback so the number is visible when previewing outside Auth0.
+  if (!acul && $("phoneMask").textContent === "your phone") {
+    $("phoneMask").textContent = "+40 723 923 876";
+  }
 
-  function maskPhone(p) {
-    const s = String(p);
-    return s.length > 4 ? s.slice(0, 3) + "•••••" + s.slice(-2) : s;
+  function formatPhone(p) {
+    // Show the real number, lightly grouped; no heavy masking — the patient
+    // needs to confirm it's the number they typed.
+    const s = String(p).replace(/\s+/g, "");
+    const m = s.match(/^(\+\d{1,3})(\d+)$/);
+    if (!m) return s;
+    const rest = m[2].replace(/(\d{3})(?=\d)/g, "$1 ");
+    return `${m[1]} ${rest}`;
   }
   function showError(msg) {
     errEl.textContent = "⚠ " + msg;
