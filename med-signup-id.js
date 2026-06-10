@@ -74,7 +74,7 @@ const TEMPLATE = `
         <div class="field" id="f-email">
           <label for="email">Email address <span class="req">*</span></label>
           <input class="control" id="email" name="email" type="email" inputmode="email"
-                 autocomplete="email" placeholder="dumitrus+56@isoft.co.il" />
+                 autocomplete="email" placeholder="Email address" />
           <p class="err" id="e-email">⚠ A valid email is required.</p>
         </div>
 
@@ -95,7 +95,7 @@ const TEMPLATE = `
               <option value="+39" data-iso="IT">🇮🇹 IT +39</option>
             </select>
             <input class="control" id="phone" name="phone" type="tel" inputmode="tel"
-                   autocomplete="tel-national" placeholder="0723923876" />
+                   autocomplete="tel-national" placeholder="Phone number" />
           </div>
           <p class="err" id="e-phone">⚠ Phone number is required to continue.</p>
         </div>
