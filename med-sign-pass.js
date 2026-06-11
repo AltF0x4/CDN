@@ -190,7 +190,7 @@ async function boot() {
   function submit() {
     if (submitBtn.disabled) return;
     submitBtn.disabled = true; submitBtn.textContent = "Creating…";
-    const payload = { email, phone, password: pw.value };
+    const payload = { email, phone_number: phone, password: pw.value };
     if (acul) {
       acul.signup(payload);            // → Auth0 creates the user / completes signup
     } else {
