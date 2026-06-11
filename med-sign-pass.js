@@ -71,6 +71,19 @@ const TEMPLATE = `
           <button class="edit" id="editEmail" type="button">Edit</button>
         </div>
 
+        <!-- the verified phone, shown for confirmation (not editable here) -->
+        <div class="identity">
+          <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"
+                  stroke="currentColor" stroke-width="1.6" fill="none"/>
+          </svg>
+          <span class="id-text">
+            <span class="id-label">Verified phone</span>
+            <span class="id-value" id="phoneValue">—</span>
+          </span>
+          <span class="verified-tag">✓ Verified</span>
+        </div>
+
         <div class="field" id="f-password">
           <label for="password">Password <span class="req">*</span></label>
           <div class="pw-wrap">
@@ -108,15 +121,17 @@ async function boot() {
   const errEl = $("err");
 
   // --- SDK wiring (live inside Auth0) ---
-  let acul = null, email = "";
+  let acul = null, email = "", phone = "";
   const Ctor = await loadSdk();
   if (Ctor) {
     try {
       acul = new Ctor();
+      const pre = acul?.untrustedData?.submittedFormData || {};
       email =
-        acul?.screen?.data?.email ||
-        acul?.untrustedData?.submittedFormData?.email ||
+        acul?.screen?.data?.email || pre.email ||
         acul?.transaction?.identifier || "";
+      phone =
+        acul?.screen?.data?.phone || acul?.screen?.data?.phoneNumber || pre.phone || "";
       const loginUrl = acul?.transaction?.loginLink;
       if (loginUrl) $("loginLink").href = loginUrl;
       (acul?.transaction?.errors || []).forEach((e) => showError(e.message || "Check your password."));
@@ -125,8 +140,17 @@ async function boot() {
     }
   }
   if (!email) email = "dumitrus+56@isoft.co.il";   // demo fallback so preview shows something
+  if (!phone) phone = "+40723923876";              // demo fallback
   $("emailValue").textContent = email;
   $("emailValue").title = email;
+  $("phoneValue").textContent = formatPhone(phone);
+  $("phoneValue").title = phone;
+
+  function formatPhone(p) {
+    const s = String(p).replace(/[^\d+]/g, "");
+    const plus = s.startsWith("+") ? "+" : "";
+    return plus + s.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
 
   function showError(msg) { errEl.textContent = "⚠ " + msg; $("f-password").classList.add("invalid"); }
   function clearError() { errEl.textContent = ""; $("f-password").classList.remove("invalid"); }
@@ -166,7 +190,7 @@ async function boot() {
   function submit() {
     if (submitBtn.disabled) return;
     submitBtn.disabled = true; submitBtn.textContent = "Creating…";
-    const payload = { email, password: pw.value };
+    const payload = { email, phone, password: pw.value };
     if (acul) {
       acul.signup(payload);            // → Auth0 creates the user / completes signup
     } else {
