@@ -44,7 +44,11 @@ function injectStyles() {
       --magenta:#ff2e7e; --text:#d8e6f2; --muted:#6c829b;
       --glow-cyan:0 0 .5rem rgba(0,229,212,.55), 0 0 1.4rem rgba(0,229,212,.25);
     }
-    html, body { margin:0; min-height:100%; background:var(--bg); }
+    html, body, #root {
+      margin:0 !important; padding:0 !important;
+      min-height:100vh; background:var(--bg) !important;
+    }
+    * { box-sizing:border-box; }
     .pk-stage {
       position:relative; min-height:100vh; display:grid; place-items:center; padding:28px 16px;
       font-family:"Rajdhani", system-ui, sans-serif; color:var(--text);
