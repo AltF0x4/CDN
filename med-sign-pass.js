@@ -190,7 +190,10 @@ async function boot() {
   function submit() {
     if (submitBtn.disabled) return;
     submitBtn.disabled = true; submitBtn.textContent = "Creating…";
-    const payload = { email, phone_number: phone, password: pw.value };
+     // If phone number is required, you need to pass it in the sign-up request
+     // If phone number is optional, you can skipp it
+     // const payload = { email, phone_number: phone, password: pw.value };
+     const payload = { email, password: pw.value };
     if (acul) {
       acul.signup(payload);            // → Auth0 creates the user / completes signup
     } else {
