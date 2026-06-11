@@ -191,7 +191,7 @@ async function boot() {
 
     const payload = {
       email,
-      phone: e164,
+      phone_number: e164,   // Auth0's standard attribute (was `phone`, which got dropped)
       given_name: $("firstName").value.trim(),
       family_name: $("lastName").value.trim(),
     };
