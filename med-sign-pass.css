@@ -145,6 +145,16 @@ body::after {
   text-transform: uppercase; color: var(--cyan-soft); padding: 4px;
 }
 .identity .edit:hover { text-shadow: var(--glow-cyan); }
+.identity .verified-tag {
+  flex: 0 0 auto;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--green);
+  padding: 3px 8px; border-radius: 999px;
+  border: 1px solid rgba(37,230,154,.4);
+  background: rgba(37,230,154,.08);
+  white-space: nowrap;
+}
 
 /* password field */
 .field { position: relative; }
