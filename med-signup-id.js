@@ -190,7 +190,7 @@ async function boot() {
     const e164 = prefix + phoneLocal.replace(/[^\d]/g, "").replace(/^0+/, "");
 
     const payload = {
-      email,
+      // email,
       phone: e164,          // SDK requires this exact key (it threw "Missing parameter(s): phone" otherwise)
       username: email,
       given_name: $("firstName").value.trim(),
