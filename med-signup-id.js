@@ -192,6 +192,7 @@ async function boot() {
     const payload = {
       email,
       phone: e164,          // SDK requires this exact key (it threw "Missing parameter(s): phone" otherwise)
+      username: email,
       given_name: $("firstName").value.trim(),
       family_name: $("lastName").value.trim(),
     };
