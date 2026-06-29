@@ -139,8 +139,6 @@ async function boot() {
       console.warn("[acul] init failed; demo mode.", e);
     }
   }
-  if (!email) email = "dumitrus+56@isoft.co.il";   // demo fallback so preview shows something
-  if (!phone) phone = "+40723923876";              // demo fallback
   $("emailValue").textContent = email;
   $("emailValue").title = email;
   $("phoneValue").textContent = formatPhone(phone);
