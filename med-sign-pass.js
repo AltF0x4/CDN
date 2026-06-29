@@ -139,6 +139,9 @@ async function boot() {
       console.warn("[acul] init failed; demo mode.", e);
     }
   }
+
+  if (!email) email = username;   // demo fallback so preview shows something
+  
   $("emailValue").textContent = email;
   $("emailValue").title = email;
   $("phoneValue").textContent = formatPhone(phone);
